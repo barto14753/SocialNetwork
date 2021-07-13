@@ -1,59 +1,27 @@
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-
-  <head>
-
-    <meta charset="utf-8">
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="Template Mo">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <meta name="author" content="TemplateMo">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
 
-    <title>Art Factory HTML CSS Template</title>
-<!--
+    <title>Social Network</title>
 
-ART FACTORY
+    <!-- Bootstrap core CSS -->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-https://templatemo.com/tm-537-art-factory
-
--->
     <!-- Additional CSS Files -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="static/assets/css/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="static/assets/css/templatemo-art-factory.css">
-    <link rel="stylesheet" type="text/css" href="static/assets/css/owl-carousel.css">
-
+    <link rel="stylesheet" href="static/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="static/assets/css/templatemo-host-cloud.css">
+    <link rel="stylesheet" href="static/assets/css/owl.css">
     </head>
     <body>
-        <div id="preloader">
-            <div class="jumper">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </div> 
-
         {% include 'navbar.html' %}
         {% block content %}{% endblock %}
         {% include 'footer.html' %}
-
-
-        <script src="static/assets/js/jquery-2.1.0.min.js"></script>
-
-    <!-- Bootstrap -->
-    <script src="static/assets/js/popper.js"></script>
-    <script src="static/assets/js/bootstrap.min.js"></script>
-
-    <!-- Plugins -->
-    <script src="static/assets/js/owl-carousel.js"></script>
-    <script src="static/assets/js/scrollreveal.min.js"></script>
-    <script src="static/assets/js/waypoints.min.js"></script>
-    <script src="static/assets/js/jquery.counterup.min.js"></script>
-    <script src="static/assets/js/imgfix.min.js"></script> 
-    
-    <!-- Global Init -->
-    <script src="static/assets/js/custom.js"></script>
     </body>
 </html>
