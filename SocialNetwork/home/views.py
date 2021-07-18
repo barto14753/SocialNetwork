@@ -6,3 +6,9 @@ def index(request):
         "title": "Social Network"
     }
     return render(request, "index.html", context=context)
+
+def signIn(request):
+    return render(request, "signIn.html")
+
+def signUp(request):
+    return render(request, "signUp.html")
