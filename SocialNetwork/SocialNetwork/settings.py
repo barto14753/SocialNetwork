@@ -132,3 +132,5 @@ STATICFILES_DIRS = [
     BASE_DIR / '/home/assets/images',
     BASE_DIR / "static"
 ]
+
+LOGIN_REDIRECT_URL = '/'
