@@ -15,7 +15,9 @@ def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user.refresh_from_db()
+            user.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
@@ -32,7 +34,6 @@ def log(request):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         context["user"] = user
-        print(user.last_login)
         if user is not None:
             login(request, user)
             print(getUser())
@@ -40,6 +41,7 @@ def log(request):
             # Redirect to a success page.
         else:
             # Return an 'invalid login' error message.
+            print("User is None")
             pass
     else:
         pass
