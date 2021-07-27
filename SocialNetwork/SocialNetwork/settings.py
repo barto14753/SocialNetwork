@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home',
-    'wall'
+    'home.apps.HomeConfig',
+    'wall.apps.WallConfig',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +137,6 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'home.User'
+
