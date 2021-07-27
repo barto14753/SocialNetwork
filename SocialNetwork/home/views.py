@@ -19,9 +19,9 @@ def register(request):
             user.refresh_from_db()
             user.save()
             username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('/wall')
     else:
         form = SignUpForm()
@@ -41,7 +41,7 @@ def log(request):
             # Redirect to a success page.
         else:
             # Return an 'invalid login' error message.
-            print("User is None")
+            print("Wrong passes")
             pass
     else:
         pass
