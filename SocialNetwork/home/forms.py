@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
+from home.models import User
 
 
-User = get_user_model()
 
 class SignUpForm(forms.ModelForm):
     username = forms.CharField(max_length=100, help_text="Must be unique")
