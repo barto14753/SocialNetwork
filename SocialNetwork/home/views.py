@@ -34,10 +34,11 @@ def register(request):
             else:
                 # Return an 'invalid login' error message.
                 print("Wrong passes")
+                return redirect('/login')
                 pass
-            return redirect('/wall')
     else:
         form = SignUpForm()
+        return redirect('/login')
     return render(request, 'registration/register.html', {'form': form})
 
 

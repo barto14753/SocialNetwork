@@ -153,7 +153,11 @@ a:link {
     <div class="sidebar">
         <h2>Social Network</h2>
         <ul>
-            <img id="userPhoto" src={{user.photo.url}}>
+            {% if user.photo %}
+              <img id="userPhoto" src={{user.photo.url}}>
+            {% else %}
+              <img id="userPhoto" src="https://image.flaticon.com/icons/png/512/149/149071.png"/>
+            {% endif %}
             <li><a>{{user.username}}</a></li>
             <li><a>{{user.email}}</a></li>
             <li><a href="#"><i class="fas fa-home"></i>Home</a></li>
