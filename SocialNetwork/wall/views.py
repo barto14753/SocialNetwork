@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from home.views import getUser
+from home.models import User
 
 def index(request):
-    print(getUser())
     context = {
         "user": getUser()
     }

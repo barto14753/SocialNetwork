@@ -70,7 +70,7 @@ a:link {
 
 #logout a
 {
-  color: red;
+  color: rgb(252, 120, 120);
 }
 
 
@@ -136,6 +136,16 @@ a:link {
     display: none !important;
   }
 }
+
+#userPhoto
+{
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border-radius: 50px;
+}
+
 </style>
 <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 
@@ -143,8 +153,9 @@ a:link {
     <div class="sidebar">
         <h2>Social Network</h2>
         <ul>
-            <li><a href="#">{{user.username}}</a></li>
-            <li><a href="#">{{user.email}}</a></li>
+            <img id="userPhoto" src={{user.photo.url}}>
+            <li><a>{{user.username}}</a></li>
+            <li><a>{{user.email}}</a></li>
             <li><a href="#"><i class="fas fa-home"></i>Home</a></li>
             <li><a href="#"><i class="fas fa-user"></i>Profile</a></li>
             <li><a href="#"><i class="fas fa-address-card"></i>About</a></li>

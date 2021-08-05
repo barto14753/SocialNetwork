@@ -141,3 +141,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'home.User'
 
+
+import os
+
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+

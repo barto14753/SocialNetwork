@@ -10,7 +10,8 @@ class SignUpForm(forms.ModelForm):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
     password1 = forms.CharField(max_length=100, widget=forms.PasswordInput())
     password2 = forms.CharField(max_length=100, widget=forms.PasswordInput())
+    photo = forms.ImageField(help_text="Not required")
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', )
+        fields = ('username', 'email', 'password1', 'password2', 'photo')
