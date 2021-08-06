@@ -158,11 +158,16 @@ a:link {
             {% else %}
               <img id="userPhoto" src="https://image.flaticon.com/icons/png/512/149/149071.png"/>
             {% endif %}
-            <li><a>{{user.username}}</a></li>
-            <li><a>{{user.email}}</a></li>
+            {% if user.username %}
+              <li><a>{{user.username}}</a></li>
+              <li><a>{{user.email}}</a></li>
+            {% else %}
+              <li><a>Anonymous</a></li>
+            {% endif %}
+            
             <li><a href="#"><i class="fas fa-home"></i>Home</a></li>
             <li><a href="#"><i class="fas fa-user"></i>Profile</a></li>
-            <li><a href="#"><i class="fas fa-address-card"></i>About</a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i>Messages</a></li>
             <li id="logout"><a href="{% url 'logout' %}" class="fas fa-sign-out-alt">Log Out</a></li>
 
         </ul>
@@ -170,5 +175,5 @@ a:link {
           <a href="#"><i class="fab fa-facebook-f"></i></a>
           <a href="#"><i class="fab fa-twitter"></i></a>
           <a href="#"><i class="fab fa-instagram"></i></a>
-      </div>
-    </div>
+        </div>
+</div>

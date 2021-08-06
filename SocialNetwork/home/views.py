@@ -10,8 +10,11 @@ context = {
     "user": None
 }
 
-def getUser():
-    return context["user"]
+# def getUser():
+#    return context["user"]
+
+def getUser(request):
+    return request.user
 
 def register(request):
     if request.method == 'POST':
@@ -28,7 +31,6 @@ def register(request):
             context["user"] = user
             if user is not None:
                 login(request, user)
-                print(getUser())
                 return redirect('/wall')
                 # Redirect to a success page.
             else:
@@ -38,7 +40,7 @@ def register(request):
                 pass
     else:
         form = SignUpForm()
-        return redirect('/login')
+        # return redirect('/login')
     return render(request, 'registration/register.html', {'form': form})
 
 
@@ -50,7 +52,6 @@ def log(request):
         context["user"] = user
         if user is not None:
             login(request, user)
-            print(getUser())
             return redirect('/wall')
             # Redirect to a success page.
         else:
