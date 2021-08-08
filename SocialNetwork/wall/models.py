@@ -23,7 +23,17 @@ class Comment(models.Model):
     content = models.CharField(max_length=200)
     published = models.DateTimeField(default=datetime.now, blank=True)
 
-class Observator(models.Model):
-    observe = models.ForeignKey(User, on_delete=CASCADE, related_name="observe")
-    observed = models.ForeignKey(User, on_delete=CASCADE)
+class Follow(models.Model):
+    followed = models.ForeignKey(User, on_delete=CASCADE, related_name="followed")
+    following = models.ForeignKey(User, on_delete=CASCADE)
+    since = models.DateTimeField(default=datetime.now, blank=True)
+
+class Request(models.Model):
+    sender = models.ForeignKey(User, on_delete=CASCADE, related_name="sender")
+    reciver = models.ForeignKey(User, on_delete=CASCADE)
+    since = models.DateTimeField(default=datetime.now, blank=True)
+
+class Friendship(models.Model):
+    friend1 = models.ForeignKey(User, on_delete=CASCADE, related_name="friend1")
+    friend2 = models.ForeignKey(User, on_delete=CASCADE)
     since = models.DateTimeField(default=datetime.now, blank=True)
