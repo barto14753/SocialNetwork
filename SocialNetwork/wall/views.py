@@ -1,9 +1,10 @@
 from .models import Post
 from django.shortcuts import render
 from home.views import getUser
-from home.models import User
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from home.models import User
 
 
 @login_required(login_url='/login')
@@ -22,3 +23,15 @@ def index(request):
             post_new.save()
 
     return render(request, "wall.html", context=context)
+
+
+
+
+def findUsers(request):
+    if request.is_ajax and request.method == "GET":
+        username = request.GET.get("username", None)
+        print("FindUsers() got {0} username".format(username))
+        users = User.objects.filter(username__contains=username).values()
+        return JsonResponse({"users": list(users)}, status = 200)
+
+    return JsonResponse({}, status = 400)

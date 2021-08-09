@@ -36,7 +36,31 @@
 
   <div class="container-search">
         <form class="form-inline ml-auto" id="seach-box" action="#" method="post">
-            <input type="text" id="search" name="search" class="input-small" placeholder="Search...">
+            <input onkeyup="updateSearch(event)" type="text" id="search" name="search" class="input-small" placeholder="Search...">
                 <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
         </form>       
 </div>
+
+<script>
+    let search = document.getElementById("search");
+
+    function updateSearch()
+    {
+        console.log(search.value)
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'find_users' %}",
+            data: {"username": search.value},
+            success: function (response) {
+                console.log(response["users"])
+                
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+        console.log("ASD")
+    }
+
+    search.onchange = updateSearch;
+</script>
