@@ -31,7 +31,7 @@ def findUsers(request):
     if request.is_ajax and request.method == "GET":
         username = request.GET.get("username", None)
         print("FindUsers() got {0} username".format(username))
-        users = User.objects.filter(username__contains=username).values()
+        users = User.objects.filter(username__contains=username)[0:5].values()
         return JsonResponse({"users": list(users)}, status = 200)
 
     return JsonResponse({}, status = 400)

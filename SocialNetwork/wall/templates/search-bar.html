@@ -32,35 +32,93 @@
         margin: 0 auto;
     }
 
+    #search_results
+    {
+        border: solid black 1px;
+        border-top: solid white 1px;
+        width: 280px;
+        margin: 0 auto;
+        background-color: white;
+        text-align: left;
+    }
+
+    .search_img
+    {
+        width: 30px;
+        height: 30px;
+    }
+
+
+
 </style>
 
   <div class="container-search">
         <form class="form-inline ml-auto" id="seach-box" action="#" method="post">
             <input onkeyup="updateSearch(event)" type="text" id="search" name="search" class="input-small" placeholder="Search...">
-                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
-        </form>       
+            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
+        </form>
+        <ul id="search_results">
+            
+        </ul>    
 </div>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
     let search = document.getElementById("search");
+    let search_results = $("#search_results");
+
+    search_results.css("display", "none");
+    search_results.focusout(function() {search_results.empty(); console.log("ASD");});
+
+    function update_search(users)
+    {
+        console.log(users.length);
+        search_results.empty();
+        if (users.length > 0)
+        {
+            search_results.css("display", "inline-block");
+            for (const user of users)
+            {
+                if (user.photo != "")
+                {
+                    console.log(user.photo != "");
+                    console.log(user.photo);
+                    search_results.append("<li> <img class=\"search_img\" src=\"/media/" + user.photo + "\">" + user.username + "</li>");
+
+                }
+            }
+        }
+        else
+        {
+            search_results.css("display", "none");
+        }
+    }
 
     function updateSearch()
     {
-        console.log(search.value)
+        console.log(search.value);
+        if (search.value == "")
+        {
+            search_results.empty();
+            search_results.css("display", "none");
+            return;
+        }
+
         $.ajax({
             type: 'GET',
             url: "{% url 'find_users' %}",
             data: {"username": search.value},
             success: function (response) {
                 console.log(response["users"])
+                update_search(response["users"]);
                 
             },
             error: function (response) {
                 console.log(response)
             }
         })
-        console.log("ASD")
     }
+
 
     search.onchange = updateSearch;
 </script>
