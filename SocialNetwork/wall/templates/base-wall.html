@@ -15,10 +15,62 @@
 
     </head>
     <body>
+
+        <style>
+            .column {
+            float: left;
+            width: 33.33%;
+            padding: 0px;
+            }
+
+            /* Clear floats after the columns */
+            .layout:after {
+            content: "";
+            display: table;
+            clear: both;
+            }
+
+        .feed
+        {
+            width: 60vw;
+            height: 100%;
+            margin-left: 20vw;
+            margin-top: 60px;
+            padding: 50px;
+            
+        }
+
+        @media (max-width: 1200px)
+        {
+            .feed
+            {
+                margin-left: 35vw;
+            }
+            
+        }
+
+        @media (max-width: 700px)
+        {
+            .feed
+            {
+                margin-left: 8vw;
+                width: 85vw;
+            }
+        }
+        </style>
+
+        <div class="layout">
+            <div class="column">{% include 'menu.html' %}</div>
+            <div class="column">
+                {% include 'search-bar.html' %}
+                <div class="feed">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+            <div class="column">{% include 'friends-bar.html' %}</div>
+        </div>
         
-        {% include 'menu.html' %}
-        {% include 'search-bar.html' %}
-        {% block content %}{% endblock %}
-        {% include 'friends-bar.html' %}
+        
+        
     </body>
 </html>

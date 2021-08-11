@@ -10,8 +10,8 @@ context = {
     "user": None
 }
 
-# def getUser():
-#    return context["user"]
+
+
 
 def getUser(request):
     return request.user

@@ -37,16 +37,47 @@
         border: solid black 1px;
         border-top: solid white 1px;
         width: 280px;
-        margin: 0 auto;
         background-color: white;
         text-align: left;
+        padding-left: 0px;
     }
 
     .search_img
     {
-        width: 30px;
-        height: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 30px;
+        margin-left: 5px;
     }
+
+    .solo_result
+    {
+        font-size: 20px;
+        padding-bottom: 5px;
+    }
+
+    .solo_result:hover
+    {
+        background-color: rgb(175, 207, 248);
+    }
+
+    @media (max-width: 1200px)
+        {
+            .container-search
+            {
+                margin-left: 15vw;
+            }
+            
+        }
+
+        @media (max-width: 700px)
+        {
+            .container-search
+            {
+                margin-left: 8vw;
+                width: 85vw;
+            }
+        }
 
 
 
@@ -68,7 +99,6 @@
     let search_results = $("#search_results");
 
     search_results.css("display", "none");
-    search_results.focusout(function() {search_results.empty(); console.log("ASD");});
 
     function update_search(users)
     {
@@ -79,12 +109,16 @@
             search_results.css("display", "inline-block");
             for (const user of users)
             {
-                if (user.photo != "")
+                if (user.photo)
                 {
                     console.log(user.photo != "");
                     console.log(user.photo);
-                    search_results.append("<li> <img class=\"search_img\" src=\"/media/" + user.photo + "\">" + user.username + "</li>");
+                    search_results.append("<li class=\"solo_result\"  href=\#\"> <img class=\"search_img\" src=\"/media/" + user.photo + "\"> " + user.username + "</li>");
 
+                }
+                else
+                {
+                    search_results.append("<li class=\"solo_result\" href=\"#\"> <img class=\"search_img\" src=\"https://image.flaticon.com/icons/png/512/149/149071.png\"> " + user.username + "</li>");
                 }
             }
         }
@@ -109,16 +143,23 @@
             url: "{% url 'find_users' %}",
             data: {"username": search.value},
             success: function (response) {
-                console.log(response["users"])
                 update_search(response["users"]);
                 
             },
             error: function (response) {
-                console.log(response)
+                return;
             }
         })
     }
 
-
     search.onchange = updateSearch;
+
+    window.addEventListener('click', function(e){   
+        if (!document.getElementById("search_results").contains(e.target) &&
+            !document.getElementById("search").contains(e.target))
+        {
+            update_search(Array());
+        } 
+        
+});
 </script>
