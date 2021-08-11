@@ -5,6 +5,6 @@ from home.views import getUser
 
 
 def profile_view(request, username):
-    user = get_object_or_404(User, username=username)
+    profile = get_object_or_404(User, username=username)
     print("Profile view got {0}".format(username))
-    return render(request, 'profile.html', {'user': user})
+    return render(request, 'profile.html', {'profile': profile})
