@@ -108,15 +108,25 @@
             search_results.css("display", "inline-block");
             for (const user of users)
             {
-                if (user.photo)
-                {
-                    search_results.append("<li class=\"solo_result\"  href=\#\"> <img class=\"search_img\" src=\"/media/" + user.photo + "\"> " + user.username + "</li>");
+                let li = $('<li></li>');
+                li.addClass("solo_result");
+                
+                let photo = $('<img>');
+                photo.addClass("search_img");
 
-                }
-                else
-                {
-                    search_results.append("<li class=\"solo_result\" href=\"#\"> <img class=\"search_img\" src=\"https://image.flaticon.com/icons/png/512/149/149071.png\"> " + user.username + "</li>");
-                }
+                if (user.photo) photo.attr("src", "/media/" + user.photo);
+                else photo.attr("src", "https://image.flaticon.com/icons/png/512/149/149071.png");
+
+                let a = $('<a></a>');
+                a.attr("href", "/profile/" + user.username);
+
+                a.append(photo);
+                a.append("  " + user.username);
+
+                li.append(a);
+
+                search_results.append(li);
+                
             }
         }
         else
