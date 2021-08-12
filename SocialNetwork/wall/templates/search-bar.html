@@ -102,7 +102,6 @@
 
     function update_search(users)
     {
-        console.log(users.length);
         search_results.empty();
         if (users.length > 0)
         {
@@ -111,8 +110,6 @@
             {
                 if (user.photo)
                 {
-                    console.log(user.photo != "");
-                    console.log(user.photo);
                     search_results.append("<li class=\"solo_result\"  href=\#\"> <img class=\"search_img\" src=\"/media/" + user.photo + "\"> " + user.username + "</li>");
 
                 }
@@ -130,7 +127,6 @@
 
     function updateSearch()
     {
-        console.log(search.value);
         if (search.value == "")
         {
             search_results.empty();

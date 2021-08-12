@@ -35,6 +35,12 @@
         visibility: hidden;
         margin-bottom: 20px;
     }
+
+    #delete_photo
+    {
+        display: none;
+        margin-bottom: 10px;
+    }
     
 </style>
 
@@ -51,8 +57,10 @@
     {% endfor %}
     <img id="post_image" src="#" alt="your image" /> <br>
 
-
-      <button id="" class="btn btn-lg btn-primary btn-block" type="submit">Post</button>
+    <div id="delete_photo">
+        <button id="delete_btn" class="btn btn-lg btn-danger btn-block" type="submit">Delete photo</button><br>
+    </div>
+    <button id="" class="btn btn-lg btn-primary btn-block" type="submit">Post</button>
     </form>
 </div>
 
@@ -62,12 +70,12 @@
 <script>
     let content = document.getElementById("id_content");
     let input = document.getElementById("id_photo");
+    let delete_btn = document.getElementById("delete_btn");
 
     content.placeholder = "What's going on?";
 
 
     function readURL() {
-        console.log("Change");
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
@@ -77,13 +85,33 @@
                     .width(250)
                     .height(200)
                     .css("visibility", "visible");
+                
+                $('#delete_photo')
+                    .css("display", "block");
             };
 
             reader.readAsDataURL(input.files[0]);
         }
     }
 
+    function deleteImg()
+    {
+        $("#id_photo").replaceWith($("#id_photo").clone());
+        $("#id_photo").change(readURL);
+        
+        
+        $('#post_image')
+            .attr('src', "")
+            .width(0)
+            .height(0)
+            .css("visibility", "hidden");
+                
+        $('#delete_photo')
+            .css("display", "none");
+    }
+
     input.onchange = readURL;
+    delete_btn.onclick = deleteImg;
 
     
 </script>

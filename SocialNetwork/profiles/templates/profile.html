@@ -1,8 +1,23 @@
 {% extends 'base-wall.html' %}
 {% load static %}
 {% block content %}
+<style>
+    .profile_photo
+    {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    border-radius: 100px;
+    }
+</style>
     <h1>
-        {{profile.photo}}
+        {% if user.photo %}
+              <img class="profile_photo" src={{profile.photo.url}}>
+        {% else %}
+              <img id="profile_photo" src="https://image.flaticon.com/icons/png/512/149/149071.png"/>
+        {% endif %}
     </h1>
+    <h1>{{profile.username}}</h1>
 
 {% endblock %}
