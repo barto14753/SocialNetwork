@@ -12,12 +12,41 @@
     }
 </style>
     <h1>
-        {% if user.photo %}
+        {% if profile.photo %}
               <img class="profile_photo" src={{profile.photo.url}}>
         {% else %}
               <img id="profile_photo" src="https://image.flaticon.com/icons/png/512/149/149071.png"/>
         {% endif %}
     </h1>
     <h1>{{profile.username}}</h1>
+    <h6>{{profile.first_name}} {{profile.last_name}}</h6>
+    <h6>Email: {{profile.email}}</h6>
+    <h6>Joined: {{profile.joined}}</h6>
+    <h6>Followers: {{profile.followers}} Following: {{profile.following}}</h6>
+    <h6>Friends: {{profile.friends}}</h6>
+    {% if user != profile %}
+        {% if is_followed %}
+            <button class="btn btn-danger">Unfollow</button>
+            
+        {% else %}
+            <button class="btn btn-primary">Follow</button>
+            <button data-url="{% url " home.views.follow_view" user_profile_id=profile.username %}"
+                class="btn btn-primary" type="button">Follow</button>
+        {% endif %}
+
+        {% if is_friend %}
+            <button>Unfriend</button>
+        {% else %}
+            {% if is_requested %}
+                <button class="btn btn-danger">Remove request</button>
+            {% elif am_i_requested %}
+                <button class="btn btn-success">Accept request</button>
+            {% else %}
+                <button class="btn btn-primary">Send request</button>
+            {% endif %}
+        {% endif %}
+    {% else %}
+    {% endif %}
+
 
 {% endblock %}

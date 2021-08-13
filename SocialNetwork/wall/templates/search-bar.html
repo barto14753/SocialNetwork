@@ -119,9 +119,17 @@
 
                 let a = $('<a></a>');
                 a.attr("href", "/profile/" + user.username);
+                a.attr("display", "block");
+                a.attr("width", "100%");
+                a.attr("height", "100%");
+                a.attr("text-decoration", "none");
+                a.attr("target", "_");
+
 
                 a.append(photo);
                 a.append("  " + user.username);
+
+                
 
                 li.append(a);
 
