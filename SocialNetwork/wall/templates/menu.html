@@ -176,10 +176,13 @@ a:link {
             {% endif %}
             
             <li><a href="{% url 'wall' %}"><i class="fas fa-home"></i>Home</a></li>
-            <li><a href="#"><i class="fas fa-user"></i>Profile</a></li>
+
+            {% if user.username %}
+            <li><a href="/profile/{{user.username}}"><i class="fas fa-user"></i>Profile</a></li>
             <li><a href="#"><i class="fas fa-envelope"></i>Messages</a></li>
             <li id="logout"><a href="{% url 'logout' %}" class="fas fa-sign-out-alt">Log Out</a></li>
-
+            {% endif %}
+            
         </ul>
         <div class="social_media">
           <a href="#"><i class="fab fa-facebook-f"></i></a>
