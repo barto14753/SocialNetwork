@@ -163,24 +163,26 @@ a:link {
     <div class="sidebar">
         <h2>Social Network</h2>
         <ul>
+            
+
+            {% if user.is_authenticated %}
             {% if user.photo %}
               <img id="userPhoto" src={{user.photo.url}}>
+              {% else %}
+                <img id="userPhoto" src="https://image.flaticon.com/icons/png/512/149/149071.png"/>
+              {% endif %}
+              <li><a href="{% url 'wall' %}"><i class="fas fa-home"></i>Home</a></li>
+              <li><a href="/profile/{{user.username}}"><i class="fas fa-user"></i>Profile</a></li>
+              <li><a href="#"><i class="fas fa-envelope"></i>Messages</a></li>
+              <li id="logout"><a href="{% url 'logout' %}" class="fas fa-sign-out-alt">Log Out</a></li>
             {% else %}
               <img id="userPhoto" src="https://image.flaticon.com/icons/png/512/149/149071.png"/>
-            {% endif %}
-            {% if user.username %}
-              <li><a>{{user.username}}</a></li>
-              <li><a>{{user.email}}</a></li>
-            {% else %}
               <li><a>Anonymous</a></li>
-            {% endif %}
-            
-            <li><a href="{% url 'wall' %}"><i class="fas fa-home"></i>Home</a></li>
+              <li><a href="{% url 'register' %}"><i class="fas fa-sign-in-alt"></i>Sign Up</a></li>
+              <li><a href="{% url 'login' %}"><i class="fas fa-sign-out-alt"></i>Login</a></li>
 
-            {% if user.username %}
-            <li><a href="/profile/{{user.username}}"><i class="fas fa-user"></i>Profile</a></li>
-            <li><a href="#"><i class="fas fa-envelope"></i>Messages</a></li>
-            <li id="logout"><a href="{% url 'logout' %}" class="fas fa-sign-out-alt">Log Out</a></li>
+
+
             {% endif %}
             
         </ul>
