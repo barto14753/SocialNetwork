@@ -11,7 +11,8 @@ class SignUpForm(forms.ModelForm):
     password1 = forms.CharField(max_length=100, widget=forms.PasswordInput(), label="Password")
     password2 = forms.CharField(max_length=100, widget=forms.PasswordInput(), label="Repeat password")
     photo = forms.ImageField(help_text="Not required")
+    background = forms.ImageField(help_text="Not required")
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'photo')
+        fields = ('username', 'email', 'password1', 'password2', 'photo', 'background')
