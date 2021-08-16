@@ -31,6 +31,16 @@ class Post(models.Model):
     
     def get_comments(self):
         return Comment.objects.filter(post=self)
+    
+    def like(self, user):
+        if not Like.objects.get(user=user).exists():
+            Like.objects.create(user=user, post=self)
+    
+    def unlike(self, user):
+        Like.objects.get(user=user).delete()
+    
+    def comment(self, user, content):
+        Comment.objects.create(user=user, post=self, content=content)
 
     
 class Like(models.Model):

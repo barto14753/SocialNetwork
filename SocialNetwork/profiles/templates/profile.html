@@ -1,6 +1,7 @@
 {% extends 'base-wall.html' %}
 {% load static %}
 {% block content %}
+
 <style>
     #profile_photo
     {
@@ -26,7 +27,7 @@
         {% if profile.background %}
               <img id="profile_background" src={{profile.background.url}}>
         {% else %}
-              <img id="profile_background" src="https://image.freepik.com/free-vector/ombre-blue-curve-light-blue-background_53876-113896.jpg"/>
+              <img id="profile_background" src="https://wallpapercave.com/wp/wp7264190.jpg"/>
         {% endif %}
 
         {% if profile.photo %}
@@ -41,22 +42,44 @@
     <h6>Joined: {{profile.joined}}</h6>
     <h6>Followers: {{profile.followers}} Following: {{profile.following}}</h6>
     <h6>Friends: {{profile.friends}}</h6>
+    <h6>Posts: {{profile.posts}}</h6>
     {% if user != profile and user.is_authenticated %}
         {% if is_followed %}
-            <button class="btn btn-danger">Unfollow</button>
+            <form action="{% url 'unfollow_url' username=profile.username %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Unfollow</button>
+            </form> 
         {% else %}
-            <button class="btn btn-primary">Follow</button>
+            <form action="{% url 'follow_url' username=profile.username %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Follow</button>
+            </form> 
         {% endif %}
+        
 
         {% if is_friend %}
             <button>Unfriend</button>
+            <form action="{% url 'remove_friend_url' username=profile.username %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Unfriend</button>
+            </form> 
         {% else %}
             {% if is_requested %}
                 <button class="btn btn-danger">Remove request</button>
+                <form action="{% url 'remove_request_url' username=profile.username %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove request</button>
+                </form> 
             {% elif am_i_requested %}
-                <button class="btn btn-success">Accept request</button>
+                <form action="{% url 'accept_request_url' username=profile.username %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Accept request</button>
+                </form> 
             {% else %}
-                <button class="btn btn-primary">Send request</button>
+                <form action="{% url 'send_request_url' username=profile.username %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Send request</button>
+                </form> 
             {% endif %}
         {% endif %}
     {% else %}
