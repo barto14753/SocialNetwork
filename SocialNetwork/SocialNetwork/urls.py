@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('wall/', include('wall.urls')),
-    url(r'^profile/(?P<username>\w+)/', include('profiles.urls')),
+    url(r'^profile/', include('profiles.urls')),
 ]

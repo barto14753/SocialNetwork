@@ -22,6 +22,11 @@
     border-radius: 10px;
     float:left;
     }
+
+    .btn
+    {
+        margin-bottom: 10px;
+    }
 </style>
     <h1>
         {% if profile.background %}
@@ -40,50 +45,160 @@
     <h6>{{profile.first_name}} {{profile.last_name}}</h6>
     <h6>Email: {{profile.email}}</h6>
     <h6>Joined: {{profile.joined}}</h6>
-    <h6>Followers: {{profile.followers}} Following: {{profile.following}}</h6>
-    <h6>Friends: {{profile.friends}}</h6>
+    <h6>Followers: 
+        <i id="followers">{{profile.followers}}</i> 
+        Following: 
+        <i id="following">{{profile.following}}</i>
+    </h6>
+    <h6>Friends: 
+        <i id="friends">{{profile.friends}}</i>
+    </h6>
     <h6>Posts: {{profile.posts}}</h6>
     {% if user != profile and user.is_authenticated %}
         {% if is_followed %}
-            <form action="{% url 'unfollow_url' username=profile.username %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Unfollow</button>
-            </form> 
+            <input type="button" class="btn btn-danger" id="followBtn" name="" value="Unfollow" />
         {% else %}
-            <form action="{% url 'follow_url' username=profile.username %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Follow</button>
-            </form> 
+            <input type="button" class="btn btn-primary" id="followBtn" name="" value="Follow" />
+            
         {% endif %}
-        
+
 
         {% if is_friend %}
-            <button>Unfriend</button>
-            <form action="{% url 'remove_friend_url' username=profile.username %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Unfriend</button>
-            </form> 
+            <input type="button" class="btn btn-danger" id="friendBtn" name="" value="Remove friend" />
+            
         {% else %}
             {% if is_requested %}
-                <button class="btn btn-danger">Remove request</button>
-                <form action="{% url 'remove_request_url' username=profile.username %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Remove request</button>
-                </form> 
+                <input type="button" class="btn btn-danger" id="friendBtn" name="" value="Remove request" />
+                
             {% elif am_i_requested %}
-                <form action="{% url 'accept_request_url' username=profile.username %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success">Accept request</button>
-                </form> 
+                <input type="button" class="btn btn-success" id="friendBtn" name="" value="Accept request" />
+                
             {% else %}
-                <form action="{% url 'send_request_url' username=profile.username %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Send request</button>
-                </form> 
+            <input type="button" class="btn btn-primary" id="friendBtn" name="" value="Send request" />
+                
             {% endif %}
         {% endif %}
     {% else %}
     {% endif %}
+
+<script>
+    function followSuccess()
+    {
+        let followBtn = $('#followBtn');
+        let followers = $('#followers');
+        let followersCount = parseInt(followers.text());
+        let mode = followBtn.attr("value");
+        
+
+        if (mode == "Follow")
+        {
+            followBtn.attr("value", "Unfollow");
+            followBtn.removeClass('btn-primary');
+            followBtn.addClass("btn-danger");
+            followers.html(followersCount + 1);
+
+        }
+        else if (mode  == "Unfollow")
+        {
+            followBtn.attr("value", "Follow");
+            followBtn.removeClass('btn-danger');
+            followBtn.addClass("btn-primary");
+            followers.html(followersCount - 1);
+        }
+    }
+
+    $('#followBtn').click(function(){
+        let url = $(this).attr("value") == "Follow" ? "{% url 'follow_url' %}" : "{% url 'unfollow_url' %}"
+
+      $.ajax({
+               type: "POST",
+               url: url,
+               data: {'profile': "{{profile.username}}", 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+               dataType: "json",
+               success: function(response) {
+                    console.log(response);
+                    followSuccess();
+                },
+                error: function(response, e) {
+                       console.log(response.responseText);
+                }
+          }); 
+    })
+
+
+
+    function friendSuccess()
+    {
+        let friendBtn = $('#friendBtn');
+        let friends = $('#friends');
+        let friendsCount = parseInt(friends.text());
+        let mode = friendBtn.attr("value");
+
+        switch(mode)
+        {
+            case 'Accept request':
+                friendBtn.attr("value", "Remove friend");
+                friendBtn.removeClass('btn-success');
+                friendBtn.addClass("btn-danger");
+                friends.html(friendsCount + 1);
+                break;
+            case 'Remove friend':
+                friendBtn.attr("value", "Send request");
+                friendBtn.removeClass('btn-danger');
+                friendBtn.addClass("btn-primary");
+                break;
+            case 'Remove request':
+                friendBtn.attr("value", "Send request");
+                friendBtn.removeClass('btn-danger');
+                friendBtn.addClass("btn-primary");
+                break;
+            case 'Send request':
+                friendBtn.attr("value", "Remove request");
+                friendBtn.removeClass('btn-primary');
+                friendBtn.addClass("btn-danger");
+                break;
+
+        }
+        
+    }
+
+    $('#friendBtn').click(function(){
+        let url = "";
+
+        switch($(this).attr("value"))
+        {
+            case 'Accept request':
+                url = "{% url 'accept_request_url' %}";
+                break;
+            case 'Remove friend':
+                url = "{% url 'remove_friend_url' %}";
+                break;
+            case 'Remove request':
+                url = "{% url 'remove_request_url' %}";
+                break;
+            case 'Send request':
+                url = "{% url 'send_request_url' %}";
+                break;
+
+        }
+
+      $.ajax({
+               type: "POST",
+               url: url,
+               data: {'profile': "{{profile.username}}", 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+               dataType: "json",
+               success: function(response) {
+                    console.log("Success");
+                    friendSuccess();
+                },
+                error: function(response, e) {
+                    console.log("Not success");
+                }
+          }); 
+    })
+
+    
+</script>
 
 
 {% endblock %}

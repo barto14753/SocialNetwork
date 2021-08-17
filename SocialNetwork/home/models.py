@@ -59,10 +59,10 @@ class User(AbstractUser):
         return Post.objects.filter(author=self)
     
     def send_request(self, receiver):
-        if self is not receiver and not Request.objects.get(sender=self, receiver=receiver).exists():
+        if self is not receiver and not Request.objects.filter(sender=self, receiver=receiver).exists():
             Request.objects.create(sender=self, receiver=receiver)
     
-    def delete_request(self, receiver):
+    def remove_request(self, receiver):
         Request.objects.get(sender=self, receiver=receiver).delete()
     
     def follow(self, followed):
@@ -74,7 +74,7 @@ class User(AbstractUser):
     
     def accept_request(self, sender):
         self.delete_request(sender)
-        if not Friendship.objects.get(friend1=self, friend2=sender).exists():
+        if not Friendship.objects.filter(friend1=self, friend2=sender).exists():
             Friendship.objects.create(friend1=self, friend2=sender)
     
     def remove_friend(self, friend):
