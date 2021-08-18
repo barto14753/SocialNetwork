@@ -53,7 +53,8 @@ class User(AbstractUser):
         for id2 in id2:
             allIds.append(id2["friend2"])
         
-        return User.objects.filter(pk__in=allIds)
+        # return query with user in alphabetical order
+        return User.objects.filter(pk__in=allIds).order_by("username")
         
 
     def get_recived_requests(self):
