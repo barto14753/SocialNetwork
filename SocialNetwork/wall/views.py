@@ -13,8 +13,10 @@ def index(request):
 
     context = {
         "user": user,
-        "form": PostForm()
+        "form": PostForm(),
+        "friends": user.get_friends()
     }
+    print(context)
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():

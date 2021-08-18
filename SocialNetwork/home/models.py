@@ -44,10 +44,17 @@ class User(AbstractUser):
         return Follow.objects.filter(following=self)
 
     def get_friends(self):
-        q1 = Friendship.objects.filter(friend1=self).values("friend2")
-        q2 = Friendship.objects.filter(friend2=self).values("friend1")
+        id1 = Friendship.objects.filter(friend2=self).values("friend1")
+        id2 = Friendship.objects.filter(friend1=self).values("friend2")
+        allIds = []
 
-        return list(chain(q1, q2))
+        for id1 in id1:
+            allIds.append(id1["friend1"])
+        for id2 in id2:
+            allIds.append(id2["friend2"])
+        
+        return User.objects.filter(pk__in=allIds)
+        
 
     def get_recived_requests(self):
         return Request.objects.filter(receiver=self)
@@ -73,13 +80,15 @@ class User(AbstractUser):
         Follow.objects.get(following=self, followed=followed).delete()
     
     def accept_request(self, sender):
-        self.delete_request(sender)
+        sender.remove_request(self)
         if not Friendship.objects.filter(friend1=self, friend2=sender).exists():
             Friendship.objects.create(friend1=self, friend2=sender)
     
     def remove_friend(self, friend):
-        Friendship.objects.get(friend1=self, friend2=friend).delete()
-        Friendship.objects.get(friend1=friend, friend2=self).delete()
+        if Friendship.objects.filter(friend1=self, friend2=friend).exists():
+            Friendship.objects.filter(friend1=self, friend2=friend).delete()
+        elif Friendship.objects.filter(friend1=friend, friend2=self).exists():
+            Friendship.objects.get(friend1=friend, friend2=self).delete()
     
     def is_friend(self, other):
         return Friendship.objects.filter(friend1=self, friend2=other).exists() or Friendship.objects.filter(friend1=other, friend2=self).exists()

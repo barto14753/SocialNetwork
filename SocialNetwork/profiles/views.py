@@ -15,6 +15,7 @@ def profile_view(request, username):
     else:
         context = {
             'profile': profile,
+            "friends": user.get_friends(),
             'is_followed': user.is_followed(profile),
             'is_friend': user.is_friend(profile),
             'is_requested': user.is_requested(profile),

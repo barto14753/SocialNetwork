@@ -117,6 +117,18 @@ a:link {
   }
 }
 
+.friend_photo
+{
+  width: 35px;
+  height: 35px;
+  margin-right: 5px;
+}
+
+.friend_username
+{
+  color: #fff;
+}
+
 
 
 </style>
@@ -125,7 +137,23 @@ a:link {
 <div class="wrapper-right">
     <div class="sidebar-right">
         <h4><i class="fa fa-users"></i> Friends</h4>
-        <ul>          
+        <ul>
+          {% for friend in friends %}
+            <li>
+              <a href="{% url 'user_profile' username=friend.username %}">
+                {% if friend.photo %}
+                  <img class="friend_photo" src={{friend.photo.url}}>
+                {% else %}
+                  <img class="friend_photo" src="https://image.flaticon.com/icons/png/512/149/149071.png"/>
+                {% endif %}
+                <i class="friend_username">
+                  {{ friend.username }}
+                </i>
+
+              </a>
+              
+            </li>
+          {% endfor %}        
         </ul>
         
 </div>
