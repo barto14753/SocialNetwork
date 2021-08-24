@@ -1,0 +1,90 @@
+{% load static %}
+
+<style>
+    .post
+    {
+        border: 1px solid black;
+        padding: 20px;
+        margin-top: 50px;
+    }
+
+    .post_header
+    {
+        
+    }
+
+    .post_author_photo
+    {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+    }
+
+    .post_author
+    {
+        color: black;
+        font-size: 20px;
+    }
+
+    .post_published
+    {
+        float:right;
+        text-decoration: none;
+        color: black;
+    }
+
+    .post_content
+    {
+        margin-bottom: 20px;
+    }
+
+    .post_content_text
+    {
+        margin-left: 30px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .post_content_photo
+    {
+        text-align: center;
+    }
+
+    .post_content_photo img
+    {
+        width: 80%;
+        height: 30%;
+    }
+
+
+</style>
+
+{% for post in posts %}
+    <div class="post">
+        <div class="post_header">
+            <a class="post_author" href="/profile/{{post.author.username}}">
+                <img class="post_author_photo" src='{{post.author.photo.url}}'>
+                {{post.author.username}}
+            </a>
+            <a class="post_published">{{post.published}}</a>
+            
+        </div>
+        <div class="post_content">
+            <div class="post_content_text">
+                <p>{{post.content}}</p>
+            </div>
+            {% if post.photo %}
+            <div class="post_content_photo">
+                <img src='{{post.photo.url}}'>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="post_stats">
+            <a>Likes: {{post.likes}} Comments: {{post.comments}}</a>
+        </div>
+        <div class="post_like">
+            
+        </div>
+    </div>
+{% endfor %}

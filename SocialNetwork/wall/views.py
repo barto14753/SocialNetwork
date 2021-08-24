@@ -14,7 +14,8 @@ def index(request):
     context = {
         "user": user,
         "form": PostForm(),
-        "friends": user.get_friends()
+        "friends": user.get_friends(),
+        "posts": user.get_posts()
     }
     print(context)
     if request.method == 'POST':

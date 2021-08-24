@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from wall.models import Follow, Friendship, Request, Post
+from wall.models import Follow, Friendship, Request, Post, Like
 from itertools import chain
 from datetime import datetime
+from django.db.models import F
 
 
 class User(AbstractUser):
@@ -38,10 +39,12 @@ class User(AbstractUser):
 
 
     def get_followers(self):
-        return Follow.objects.filter(followed=self)
+        ids = Follow.objects.filter(followed=self).values("following")
+        return User.objects.filter(pk__in=ids)
     
     def get_following(self):
-        return Follow.objects.filter(following=self)
+        ids = Follow.objects.filter(following=self).values("followed")
+        return User.objects.filter(pk__in=ids)
 
     def get_friends(self):
         id1 = Friendship.objects.filter(friend2=self).values("friend1")
@@ -63,8 +66,13 @@ class User(AbstractUser):
     def get_sent_requests(self):
         return Request.objects.filter(sender=self)
 
+    def get_my_posts(self):
+        return Post.objects.filter(author=self).annotate(is_liked=self.if_like_post(F('pk')))
+    
     def get_posts(self):
-        return Post.objects.filter(author=self)
+        following = self.get_following()
+        
+        pass
     
     def send_request(self, receiver):
         if self is not receiver and not Request.objects.filter(sender=self, receiver=receiver).exists():
@@ -105,6 +113,19 @@ class User(AbstractUser):
     
     def am_i_followed(self, other):
         return Follow.objects.filter(following=other, followed=self).exists()
+
+
+    def get_post_likes(self, post):
+        pks = post.get_liking_users()
+        print(pks)
+
+    def get_post_info(self, post):
+        author = User.objects.get(pk=post.author)
+        liking_users = post.get_liking_users()
+    
+    def if_like_post(self, post_id):
+        post = Post.objects.get(pk=post_id)
+        return Like.objects.get(user=self, post=post).exists()
 
     
         

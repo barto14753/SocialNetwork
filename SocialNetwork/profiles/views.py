@@ -10,6 +10,7 @@ import json
 def profile_view(request, username):
     user = request.user
     profile = get_object_or_404(User, username=username)
+    posts = profile.get_my_posts()
     if not user.is_authenticated:
         return render(request, 'profile.html', context={'profile': profile})
     else:
@@ -20,6 +21,7 @@ def profile_view(request, username):
             'is_friend': user.is_friend(profile),
             'is_requested': user.is_requested(profile),
             'am_i_requested': user.am_i_requested(profile),
+            'posts': posts,
         }
         return render(request, 'profile.html', context=context)
 

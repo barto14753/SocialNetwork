@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'wall.apps.WallConfig',
     'profiles.apps.ProfilesConfig',
-    'post.apps.PostConfig'
+    'feed.apps.FeedConfig'
 ]
 
 MIDDLEWARE = [

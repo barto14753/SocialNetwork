@@ -8,8 +8,6 @@ class Post(models.Model):
     author = models.ForeignKey("home.User", on_delete=models.CASCADE)
     content = models.CharField(max_length=300)
     published = models.DateTimeField(default=datetime.now, blank=True)
-    likes = models.IntegerField(default=0)
-    comments = models.IntegerField(default=0)
     photo = models.ImageField(null=True, blank=True, upload_to="post_photos")
 
     @property
@@ -19,18 +17,21 @@ class Post(models.Model):
     @property
     def comments(self):
         return len(Comment.objects.filter(post=self))
+
+    @property
+    def get_likes(self):
+        return Like.objects.filter(post=self)
+    
+    @property
+    def get_comments(self):
+        return Comment.objects.filter(post=self)
+    
     
     def get_liking_users(self):
         return Like.objects.filter(post=self).values("user")
     
     def get_commenting_users(self):
         return Comment.objects.filter(post=self).values("user")
-    
-    def get_likes(self):
-        return Like.objects.filter(post=self)
-    
-    def get_comments(self):
-        return Comment.objects.filter(post=self)
     
     def like(self, user):
         if not Like.objects.get(user=user).exists():
@@ -41,6 +42,9 @@ class Post(models.Model):
     
     def comment(self, user, content):
         Comment.objects.create(user=user, post=self, content=content)
+    
+    def is_liked_by(self, user):
+        return Like.objects.get(user=user).exists()
 
     
 class Like(models.Model):
