@@ -67,7 +67,8 @@ class User(AbstractUser):
         return Request.objects.filter(sender=self)
 
     def get_my_posts(self):
-        return Post.objects.filter(author=self).annotate(is_liked=self.if_like_post(F('pk')))
+        posts = Post.objects.filter(author=self)
+        return self.get_my_posts_with_likes(posts)
     
     def get_posts(self):
         following = self.get_following()
@@ -123,9 +124,14 @@ class User(AbstractUser):
         author = User.objects.get(pk=post.author)
         liking_users = post.get_liking_users()
     
-    def if_like_post(self, post_id):
-        post = Post.objects.get(pk=post_id)
-        return Like.objects.get(user=self, post=post).exists()
+    def if_like_post(self, post):
+        return Like.objects.filter(user=self, post=post).exists()
+
+    def get_my_posts_with_likes(self, posts):
+        for post in posts:
+            post.is_liked = self.if_like_post(post)
+        return posts
+            
 
     
         
