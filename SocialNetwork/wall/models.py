@@ -34,17 +34,18 @@ class Post(models.Model):
         return Comment.objects.filter(post=self).values("user")
     
     def like(self, user):
-        if not Like.objects.get(user=user).exists():
+        print("Like")
+        if not Like.objects.filter(user=user, post=self).exists():
             Like.objects.create(user=user, post=self)
     
     def unlike(self, user):
-        Like.objects.get(user=user).delete()
+        print("Unlike")
+        Like.objects.get(post=self, user=user).delete()
     
     def comment(self, user, content):
         Comment.objects.create(user=user, post=self, content=content)
     
-    def is_liked_by(self, user):
-        return Like.objects.get(user=user).exists()
+
 
     
 class Like(models.Model):

@@ -6,12 +6,9 @@
         border: 1px solid black;
         padding: 20px;
         margin-top: 50px;
+        border-radius: 15px;
     }
 
-    .post_header
-    {
-        
-    }
 
     .post_author_photo
     {
@@ -61,6 +58,12 @@
         width: 100px;
     }
 
+    .post_stats a
+    {
+        color: black;
+        text-decoration: none;
+    }
+
 </style>
 
 {% for post in posts %}
@@ -85,14 +88,50 @@
         </div>
 
         <div class="post_stats">
-            <a>Likes: {{post.likes}} Comments: {{post.comments}}</a>
+            <a class="post_stats_likes">Likes: {{post.likes}} </a>
+            <a class="post_stats_comments">Comments: {{post.comments}} </a>
         </div>
         <div class="post_like">
             {% if post.is_liked %}
-            <button class="btn btn-danger">Unlike</button>
+            <button class="btn btn-danger like_unlike_btn" id={{post.id}}>Unlike</button>
             {% else %}
-            <button class="btn btn-primary">Like</button>
+            <button class="btn btn-primary like_unlike_btn" id={{post.id}}>Like</button>
             {% endif %}
         </div>
     </div>
 {% endfor %}
+
+<script>
+    $('.like_unlike_btn').click(function(event) {
+        let target = $(this);
+        let mode = $(event.target).text();
+        let url = mode == "Like" ? "{% url 'like_url' %}" : "{% url 'unlike_url' %}";
+        let likes = $(event.target).parent().parent().find(".post_stats_likes")[0];
+
+        $.ajax({
+               type: "POST",
+               url: url,
+               data: {'post_id': target.attr("id"), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+               dataType: "json",
+               success: function(response) {
+                    if (mode == "Like")
+                    {
+                        target.text("Unlike");
+                        target.removeClass('btn-primary');
+                        target.addClass("btn-danger");
+                        
+                    }
+                    else
+                    {
+                        target.text("Like")
+                        target.removeClass('btn-danger');
+                        target.addClass("btn-primary");
+                    }
+                    likes.innerHTML = "Likes: " + response.post_likes.toString();
+                },
+                error: function(response, e) {
+                       console.log(response.responseText);
+                }
+          }); 
+    })
+</script>
