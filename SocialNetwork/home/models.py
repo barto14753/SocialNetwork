@@ -68,12 +68,14 @@ class User(AbstractUser):
 
     def get_my_posts(self):
         posts = Post.objects.filter(author=self)
-        return self.get_my_posts_with_likes(posts)
+        return self.get_posts_with_my_likes(posts).order_by("-published")
     
     def get_posts(self):
         following = self.get_following()
+        print(following)
+        posts = Post.objects.filter(author__in=following)
+        return self.get_posts_with_my_likes(posts).order_by("-published")
         
-        pass
     
     def send_request(self, receiver):
         if self is not receiver and not Request.objects.filter(sender=self, receiver=receiver).exists():
@@ -127,7 +129,7 @@ class User(AbstractUser):
     def if_like_post(self, post):
         return Like.objects.filter(user=self, post=post).exists()
 
-    def get_my_posts_with_likes(self, posts):
+    def get_posts_with_my_likes(self, posts):
         for post in posts:
             post.is_liked = self.if_like_post(post)
         return posts

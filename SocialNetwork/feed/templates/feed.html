@@ -53,7 +53,7 @@
         height: 30%;
     }
 
-    .btn
+    .like_unlike_btn
     {
         width: 100px;
     }
@@ -64,13 +64,91 @@
         text-decoration: none;
     }
 
+    .post_comment_form
+    {
+        width: 100%;
+        height: 40px;
+        padding: 8px 20px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        font-size: 16px;
+        resize: none;
+        margin-bottom: 20px;
+        display:block;
+    }
+
+    .post_comment{ 
+    position: relative;
+    } 
+
+    .post_comment_form_button { 
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    }
+
+    .post_comments
+    {
+        max-height: 200px;
+        overflow: scroll;
+        padding: 20px;
+    }
+
+    .comment
+    {
+        padding: 20px;
+        border: 1px solid black;
+        margin-bottom: 15px;
+    }
+
+    .comment_author_photo
+    {
+        width: 38px;
+        height: 38px;
+        border-radius: 25px;
+    }
+
+    .comment_author
+    {
+        color: black;
+        font-size: 18px;
+        text-decoration: none;
+    }
+
+    .comment_published
+    {
+        font-size: 12px;
+        float:right;
+        text-decoration: none;
+        color: black;
+    }
+
+    .comment_content
+    {
+        margin-bottom: 20px;
+    }
+
+    .comment_content_text
+    {
+        margin-left: 30px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
 </style>
 
 {% for post in posts %}
     <div class="post">
         <div class="post_header">
             <a class="post_author" href="/profile/{{post.author.username}}">
+                {% if post.author.photo %}
                 <img class="post_author_photo" src='{{post.author.photo.url}}'>
+                {% else %}
+                <img class="post_author_photo" src="https://image.flaticon.com/icons/png/512/149/149071.png">
+                {% endif %}
+                
                 {{post.author.username}}
             </a>
             <a class="post_published">{{post.published}}</a>
@@ -97,6 +175,28 @@
             {% else %}
             <button class="btn btn-primary like_unlike_btn" id={{post.id}}>Like</button>
             {% endif %}
+        </div>
+        <div class="post_comment">
+            <textarea class="post_comment_form" placeholder="Share your opinion"></textarea>
+            <button class="btn btn-success post_comment_form_button" id={{post.id}}>Comment</button>
+        </div>
+        <h3>Comments</h3>
+        <div class="post_comments">
+            {% for comment in post.get_comments %}
+            <div class="comment">
+                    <a class="comment_author" href="/profile/{{comment.user.username}}">
+                        {% if comment.user.photo %}
+                        <img class="comment_author_photo" src='{{comment.user.photo.url}}'>
+                        {% else %}
+                        <img class="comment_author_photo" src="https://image.flaticon.com/icons/png/512/149/149071.png">
+                        {% endif %}
+                        {{ comment.user.username }}
+                    </a>
+                    <a class="comment_published">{{comment.published}}</a>
+                    <p class="comment_content_text">{{comment.content}}</p>
+                
+            </div>
+            {% endfor %}
         </div>
     </div>
 {% endfor %}
@@ -134,4 +234,49 @@
                 }
           }); 
     })
+
+
+    $('.post_comment_form_button').click(function(event) {
+        let target = $(this);
+        let comment = $(event.target).parent().find(".post_comment_form")[0];
+        let content = comment.value;
+        comment.value = "";
+        let comments_stats = $(event.target).parent().parent().find(".post_stats_comments")[0];
+        let photo_src = $(event.target).parent().parent().find(".post_author_photo")[0].src;
+        let profile_href = $(event.target).parent().parent().find(".post_author")[0].href;
+        let comments = $(this).parent().parent().find(".post_comments")[0];
+
+        $.ajax({
+               type: "POST",
+               url: "{% url 'comment_url' %}",
+               data: {
+                   'post_id': target.attr("id"),
+                    'content': content,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
+               dataType: "json",
+               success: function(response) {
+                    
+                    comments_stats.innerHTML = "Comments: " + response.post_comments.toString();
+
+                    let com = $("<div></div>").addClass("comment");
+                    let author = $("<a></a>").addClass("comment_author").attr("href", profile_href);
+                    let author_photo = $("<img>").addClass("comment_author_photo").attr("src", photo_src);
+
+                    
+                    let comment_published = $("<a></a>").addClass("comment_published").append(new Date());
+                    let comment_content = $("<p></p>").addClass("comment_content_text").append(content);
+
+                    author.append(author_photo);
+                    com.append(author);
+                    com.append(comment_published);
+                    com.append(comment_content);
+                    comments.append(com[0]);
+
+                },
+                error: function(response, e) {
+                       console.log(response.responseText);
+                }
+          }); 
+    })
 </script>
+
