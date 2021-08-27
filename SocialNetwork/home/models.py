@@ -84,6 +84,9 @@ class User(AbstractUser):
     def remove_request(self, receiver):
         Request.objects.get(sender=self, receiver=receiver).delete()
     
+    def reject_request(self, sender):
+        Request.objects.get(sender=sender, receiver=self).delete()
+    
     def follow(self, followed):
         if self is not followed and not Follow.objects.filter(following=self, followed=followed).exists():
             Follow.objects.create(following=self, followed=followed)

@@ -15,7 +15,9 @@
     .requests_column {
         flex: 50%;
         padding: 20px;
-        height: 300px; 
+        max-height: 600px;
+        min-height:  200px;
+        overflow: scroll;
         -webkit-box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
 -moz-box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
 box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
@@ -56,12 +58,30 @@ box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
         margin-left: -20px;
     }
 
+    .request_badge
+    {
+        background-color: red;
+        color: white;
+        position: relative;
+        top: -10px;
+        left: -5px;
+        font-size: 18px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left: 6px;
+        padding-right: 6px;
+        border-radius: 20px;
+    }
+
+    
 
 </style>
 <h1>Requests</h1>
 <div id="requests_container">
     <div id="received_requests_container" class="requests_column">
-        <h3>Received</h3>
+        <h3>Received
+            <span class="request_badge">{{received_requests_count}}</span>
+        </h3>
         <ul class="requests_list">
             {% for request in received_requests %}
             <div class="request_box">
@@ -75,14 +95,16 @@ box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
                     {{request.sender.username}}
                 </a>
 
-                <button class="btn btn-danger" value="{{request.sender.username}}">Reject</button>
-                <button class="btn btn-success" value="{{request.sender.username}}">Accept</button>
+                <button class="btn btn-danger request_btn request_reject_btn" value="{{request.sender.username}}">Reject</button>
+                <button class="btn btn-success request_btn request_accept_btn" value="{{request.sender.username}}">Accept</button>
             </div>
             {% endfor %}
         </ul>
     </div>
     <div id="sent_requests_container" class="requests_column">
-        <h3>Sent</h3>
+        <h3>Sent
+            <span class="request_badge">{{sent_requests_count}}</span>
+        </h3>
         <ul class="requests_list">
             {% for request in sent_requests %}
             <div class="request_box">
@@ -95,7 +117,7 @@ box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
                     
                     {{request.receiver.username}}
                 </a>
-                <button class="btn btn-danger" value="{{request.receiver.username}}">Remove</button>
+                <button class="btn btn-danger request_btn request_remove_btn" value="{{request.receiver.username}}">Remove</button>
             </div>
             {% endfor %}
         </ul>
@@ -103,6 +125,46 @@ box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
 </div>
 
 <script>
-    
+
+
+    $('.request_btn').click(function(event) {
+        let target = $(this);
+        let mode = target.text();
+        let badge = target.parent().parent().parent().find(".request_badge");
+        let url = "";
+        
+
+        switch (mode)
+        {
+            case "Accept":
+                url = "{% url 'accept_request_url' %}";
+                break;
+            case "Reject":
+                url = "{% url 'reject_request_url' %}";
+                break;
+            case "Remove":
+                url = "{% url 'remove_request_url' %}";
+                break;
+        }
+        
+
+        $.ajax({
+               type: "POST",
+               url: url,
+               data: {
+                   'profile': target.attr("value"),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
+               dataType: "json",
+               success: function(response) {
+                    target.parent().remove();
+                    let badge_num = parseInt(badge.text());
+                    badge.text((badge_num-1).toString());
+
+                },
+                error: function(response, e) {
+                       console.log(response.responseText);
+                }
+          }); 
+    })
 </script>
 {% endblock %}

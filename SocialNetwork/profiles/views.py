@@ -67,6 +67,8 @@ def friend_handle_view(request, mode):
             user.send_request(profile)
         elif mode == "remove_request":
             user.remove_request(profile)
+        elif mode == "reject_request":
+            user.reject_request(profile)
         elif mode == "remove_friend":
             user.remove_friend(profile)
         else:
@@ -86,6 +88,9 @@ def remove_request_view(request):
 
 def accept_request_view(request):
     return friend_handle_view(request, "accept")
+
+def reject_request_view(request):
+    return friend_handle_view(request, "reject")
 
 def remove_friend_view(request):
     return friend_handle_view(request, "remove_friend")
