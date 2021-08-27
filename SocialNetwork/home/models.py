@@ -26,7 +26,7 @@ class User(AbstractUser):
         return len(Friendship.objects.filter(friend1=self)) + len(Friendship.objects.filter(friend2=self))
     
     @property
-    def recived_requests(self):
+    def recieved_requests(self):
         return len(Request.objects.filter(receiver=self))
     
     @property
@@ -60,7 +60,7 @@ class User(AbstractUser):
         return User.objects.filter(pk__in=allIds).order_by("username")
         
 
-    def get_recived_requests(self):
+    def get_received_requests(self):
         return Request.objects.filter(receiver=self)
     
     def get_sent_requests(self):

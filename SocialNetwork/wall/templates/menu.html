@@ -178,7 +178,7 @@ a:link {
               <li><a href="{% url 'wall' %}"><i class="fas fa-home"></i>Home</a></li>
               <li><a href="/profile/{{user.username}}"><i class="fas fa-user"></i>Profile</a></li>
               <li><a href="#"><i class="fas fa-envelope"></i>Messages</a></li>
-              <li><a href="#"><i class="fas fa-paper-plane"></i>Requests</a></li>
+              <li><a href="{% url 'requests_url' %}"><i class="fas fa-paper-plane"></i>Requests</a></li>
               <li id="logout"><a href="{% url 'logout' %}" class="fas fa-sign-out-alt"> Log Out</a></li>
             {% else %}
               <img id="userPhoto" src="https://image.flaticon.com/icons/png/512/149/149071.png"/>

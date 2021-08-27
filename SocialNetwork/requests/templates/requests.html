@@ -1,0 +1,108 @@
+{% extends 'base-wall.html' %}
+{% load static %}
+{% block content %}
+<style>
+    #requests_container {
+        display: flex;
+    }
+
+    #requests_container:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+
+    .requests_column {
+        flex: 50%;
+        padding: 20px;
+        height: 300px; 
+        -webkit-box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
+-moz-box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
+box-shadow: 0px 0px 53px -7px rgba(66, 68, 90, 1);
+        margin: 5px;
+        border-radius: 10px;
+    }
+
+    .request_box
+    {
+        width: 100%;
+        border: 0.5px solid black;
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .request_box button
+    {
+        float:right;
+        margin-left: 5px;
+        border-radius: 20px;
+    }
+
+    .request_box a
+    {
+
+    }
+
+    .request_user_photo
+    {
+        width: 40px;
+        height: 40px;
+    }
+
+    .requests_list
+    {
+        margin-left: -20px;
+    }
+
+
+</style>
+<h1>Requests</h1>
+<div id="requests_container">
+    <div id="received_requests_container" class="requests_column">
+        <h3>Received</h3>
+        <ul class="requests_list">
+            {% for request in received_requests %}
+            <div class="request_box">
+                <a class="" href="/profile/{{request.sender.username}}">
+                    {% if request.sender.photo %}
+                    <img class="request_user_photo" src='{{request.sender.photo.url}}'>
+                    {% else %}
+                    <img class="request_user_photo" src="https://image.flaticon.com/icons/png/512/149/149071.png">
+                    {% endif %}
+                    
+                    {{request.sender.username}}
+                </a>
+
+                <button class="btn btn-danger" value="{{request.sender.username}}">Reject</button>
+                <button class="btn btn-success" value="{{request.sender.username}}">Accept</button>
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="sent_requests_container" class="requests_column">
+        <h3>Sent</h3>
+        <ul class="requests_list">
+            {% for request in sent_requests %}
+            <div class="request_box">
+                <a class="" href="/profile/{{request.receiver.username}}">
+                    {% if request.receiver.photo %}
+                    <img class="request_user_photo" src='{{request.receiver.photo.url}}'>
+                    {% else %}
+                    <img class="request_user_photo" src="https://image.flaticon.com/icons/png/512/149/149071.png">
+                    {% endif %}
+                    
+                    {{request.receiver.username}}
+                </a>
+                <button class="btn btn-danger" value="{{request.receiver.username}}">Remove</button>
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    
+</script>
+{% endblock %}
