@@ -6,13 +6,13 @@
   /* DEMO-SPECIFIC STYLES */
 .typewriter h1 {
   color: #fff;
-  width: 450px;
+  width: 550px;
   font-family: monospace;
   overflow: hidden; /* Ensures the content is not revealed until the animation */
   border-right: .15em solid rgb(251, 251, 251); /* The typwriter cursor */
   white-space: nowrap; /* Keeps the content on a single line */
   margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: .15em; /* Adjust as needed */
+  letter-spacing: .10em; /* Adjust as needed */
   animation: 
     typing 2.5s steps(30, end),
     blink-caret .5s step-end infinite;
@@ -21,13 +21,13 @@
 /* The typing effect */
 @keyframes typing {
   from { width: 0 }
-  to { width: 50% }
+  to { width: 100% }
 }
 
 /* The typewriter cursor effect */
 @keyframes blink-caret {
   from, to { border-color: transparent }
-  50% { border-color: rgb(250, 250, 250) }
+  70% { border-color: rgb(250, 250, 250) }
 }
 </style>
 
